@@ -80,7 +80,8 @@ Tell me — which stream are you interested in? Engineering, Medical, Diploma af
       });
 
       if (!response.ok) {
-        throw new Error("API Connection failed");
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.reply || errorData.error || `Server error: ${response.status}`);
       }
 
       const data = await response.json();
