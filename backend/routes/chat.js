@@ -216,7 +216,7 @@ router.post('/', async (req, res) => {
 
     // Call Groq API
     const response = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: 'llama-3.1-8b-instant',
       messages: messages,
       max_tokens: 1024
     });
@@ -287,8 +287,14 @@ router.post('/', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Error in chat route:', error);
-    return res.status(500).json({ error: error.message || 'Internal Server Error' });
+    console.error('Chat route error:', error.message);
+    return res.status(500).json({ 
+      reply: 'Sorry, I am having a technical issue. Please try again.',
+      error: error.message,
+      leadCaptured: false,
+      escalated: false,
+      leadData: null
+    });
   }
 });
 

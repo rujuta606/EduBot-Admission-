@@ -75,21 +75,16 @@ Tell me — which stream are you interested in? Engineering, Medical, Diploma af
         },
         body: JSON.stringify({
           message: text,
-          history: history // pass chat history context
+          history: history
         })
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.reply || errorData.error || `Server error: ${response.status}`);
-      }
-
       const data = await response.json();
-
-      // Append assistant reply
-      setHistory(prev => [...prev, { role: "assistant", content: data.reply }]);
-
-      // Check lead capture status
+      
+      if (data.reply) {
+        setHistory(prev => [...prev, { role: "assistant", content: data.reply }]);
+      }
+      
       if (data.leadCaptured) {
         const id = Date.now();
         const lead = data.leadData || {};
@@ -98,31 +93,29 @@ Tell me — which stream are you interested in? Engineering, Medical, Diploma af
           type: "lead",
           content: `Lead saved! ${lead.name || "Student"} — ${lead.stream || "Admission"} | Slot: ${lead.slot || "TBD"}`
         }]);
-        // Remove lead captured banner after 8 seconds
-        setTimeout(() => {
-          setBanners(prev => prev.filter(b => b.id !== id));
-        }, 8000);
+        setTimeout(() => setBanners(prev => prev.filter(b => b.id !== id)), 8000);
       }
 
-      // Check human escalation status
       if (data.escalated) {
         setIsEscalated(true);
         const id = Date.now();
         setBanners(prev => [...prev, {
           id,
-          type: "escalated",
-          content: "Session Escalated — Yellow Alert. A human advisor has been requested."
+          type: "escalation",
+          content: "Student escalated — connecting to human counsellor"
         }]);
+        setTimeout(() => setBanners(prev => prev.filter(b => b.id !== id)), 8000);
       }
 
     } catch (error) {
-      console.error("Chat fetch error:", error);
+      console.error('Send error:', error);
       setHistory(prev => [...prev, { 
         role: "assistant", 
-        content: "⚠️ Connection Error: I couldn't reach the admission server. Please check if the backend is running at https://edubot-admission.onrender.com." 
+        content: "Sorry, I had a technical issue. Please try again." 
       }]);
     } finally {
       setIsWaiting(false);
+      setMessage("");
       setTimeout(() => {
         if (textareaRef.current) {
           textareaRef.current.focus();

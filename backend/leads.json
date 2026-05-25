@@ -24,5 +24,57 @@
     "slot": "Monday 10AM",
     "escalated": false,
     "timestamp": "2026-05-25T05:35:07.865Z"
+  },
+  {
+    "name": "Rujuta",
+    "phone": "<phone number>",
+    "stream": "Engineering",
+    "board": "State Board",
+    "marks": "199.5",
+    "cutoff": "196.5",
+    "colleges": "PSG College of Technology, Coimbatore,CSE",
+    "department": "BC Category",
+    "slot": "PSG College of Technology",
+    "escalated": false,
+    "timestamp": "2026-05-25T08:05:54.200Z"
+  },
+  {
+    "name": "{Rujuta}",
+    "phone": "{not provided}",
+    "stream": "{Engineering}",
+    "board": "{State Board}",
+    "marks": "{not provided}",
+    "cutoff": "{199.5}",
+    "colleges": "{PSG College of Technology, Coimbatore}",
+    "department": "{CSE}",
+    "slot": "{Yes}",
+    "escalated": false,
+    "timestamp": "2026-05-25T08:06:45.422Z"
+  },
+  {
+    "name": "{Deepitha}",
+    "phone": "{9876543210}",
+    "stream": "{Medical}",
+    "board": "{NEET score}",
+    "marks": "{716/720}",
+    "cutoff": "{Madurai Medical College}",
+    "colleges": "{N/A}",
+    "department": "{Yes}",
+    "slot": "{Escalated}",
+    "escalated": false,
+    "timestamp": "2026-05-25T08:17:38.690Z"
+  },
+  {
+    "name": "Deepitha",
+    "phone": "9876543210",
+    "stream": "Medical",
+    "board": "NEET",
+    "marks": "716",
+    "cutoff": "600",
+    "colleges": "Madurai Medical College",
+    "department": "MBBS",
+    "slot": "2024",
+    "escalated": false,
+    "timestamp": "2026-05-25T08:18:31.742Z"
   }
 ]

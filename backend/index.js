@@ -9,8 +9,8 @@ dotenv.config();
 const app = express();
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json());
 
@@ -42,6 +42,32 @@ app.get('/leads', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log('Server running on port 5000');
+
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'running', 
+    port: PORT,
+    timestamp: new Date().toISOString()
+  });
+});
+
+try {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Backend ready at http://localhost:${PORT}`);
+    console.log(`Admin dashboard at http://localhost:${PORT}/admin.html`);
+  });
+} catch (err) {
+  console.error('Failed to start server:', err.message);
+  process.exit(1);
+}
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err.message);
+  console.error(err.stack);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise);
+  console.error('Reason:', reason);
 });
