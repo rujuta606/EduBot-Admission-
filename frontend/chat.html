@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>EduBot Admission | AI Chat Assistant</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  
+  <!-- Google Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+  
+  <!-- Custom Tailwind Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#004ac6",
+            secondary: "#712ae2",
+            tertiary: "#005e6e",
+            surface: "#f7f9fb",
+            "on-surface": "#191c1e",
+            "on-surface-variant": "#434655"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Inline CSS for Animations & Scrollbars -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f9fb;
+      color: #191c1e;
+      overflow: hidden; /* No scroll on body as requested */
+    }
+
+    /* Soft Mesh Gradient background blobs */
+    .mesh-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -10;
+      overflow: hidden;
+      background-color: #f7f9fb;
+      pointer-events: none;
+      opacity: 0.25;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.35;
+      mix-blend-mode: multiply;
+      will-change: transform;
+    }
+
+    .blob-blue {
+      background-color: #004ac6;
+      width: 450px;
+      height: 450px;
+      top: -10%;
+      left: -10%;
+      animation: moveBlobBlue 25s infinite alternate ease-in-out;
+    }
+
+    .blob-purple {
+      background-color: #712ae2;
+      width: 500px;
+      height: 500px;
+      bottom: -15%;
+      right: -10%;
+      animation: moveBlobPurple 30s infinite alternate ease-in-out;
+    }
+
+    .blob-teal {
+      background-color: #005e6e;
+      width: 400px;
+      height: 400px;
+      top: 35%;
+      left: 20%;
+      animation: moveBlobTeal 28s infinite alternate ease-in-out;
+    }
+
+    @keyframes moveBlobBlue {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(100px, 60px) scale(1.1); }
+      100% { transform: translate(-30px, 120px) scale(0.9); }
+    }
+
+    @keyframes moveBlobPurple {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-80px, -60px) scale(0.95); }
+      100% { transform: translate(60px, -140px) scale(1.05); }
+    }
+
+    @keyframes moveBlobTeal {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(120px, -100px) scale(1.05); }
+      100% { transform: translate(-65px, 70px) scale(0.9); }
+    }
+
+    /* PopIn bubble entry animation */
+    .animate-pop-in {
+      animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* SlideIn Banner Animation */
+    .animate-slide-in {
+      animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-12px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Dots bounce for typing indicator */
+    .dot-bounce {
+      animation: dotBounce 1.2s infinite ease-in-out;
+    }
+
+    @keyframes dotBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Styling helpers */
+    .style-pre-wrap {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* Custom scrollbar for Chat container */
+    #chat-window::-webkit-scrollbar {
+      width: 6px;
+    }
+    #chat-window::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #chat-window::-webkit-scrollbar-thumb {
+      background: rgba(0, 74, 198, 0.15);
+      border-radius: 9999px;
+    }
+    #chat-window::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 74, 198, 0.3);
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden bg-surface text-on-surface">
+
+  <!-- Soft Mesh Background -->
+  <div class="mesh-container">
+    <div class="blob blob-blue"></div>
+    <div class="blob blob-purple"></div>
+    <div class="blob blob-teal"></div>
+  </div>
+
+  <!-- Header: Fixed Top -->
+  <header class="fixed top-0 left-0 right-0 h-[72px] bg-white border-b border-[#e0e3e5] px-6 flex items-center justify-between z-40 shadow-sm select-none">
+    <div class="flex items-center gap-3">
+      <!-- Back Arrow -->
+      <a href="index.html" class="text-on-surface hover:text-primary transition-all duration-150 flex items-center justify-center w-9 h-9 rounded-full hover:bg-slate-100 active:scale-90" title="Back to Home">
+        <span class="material-symbols-outlined text-[24px]">arrow_back</span>
+      </a>
+      
+      <!-- Kavin Avatar -->
+      <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-inner flex-shrink-0">
+        <span class="material-symbols-outlined text-[22px]">smart_toy</span>
+      </div>
+      
+      <!-- User Info -->
+      <div>
+        <h2 class="font-extrabold text-sm text-on-surface">Kavin</h2>
+        <div class="flex items-center gap-1.5 mt-0.5">
+          <!-- Pulse Dot -->
+          <span id="status-dot" class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          </span>
+          <span id="status-text" class="text-[11px] font-semibold text-on-surface-variant">AI Admission Counsellor · Online</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Book Call link -->
+    <a href="contact.html" class="text-sm font-bold text-primary hover:text-secondary hover:underline transition-colors flex items-center gap-1">
+      <span class="material-symbols-outlined text-[18px]">event_available</span>
+      <span>Book Call</span>
+    </a>
+  </header>
+
+  <!-- Banners Div: Fixed Below Header -->
+  <div id="banners-container" class="fixed top-[72px] left-0 right-0 px-6 py-3 max-w-3xl mx-auto z-30 space-y-2 pointer-events-none">
+    <!-- Active notification banners inject here (e.g. lead captured or escalated alerts) -->
+  </div>
+
+  <!-- Chat Window: Flex-1, Overflow-y auto, centered layout -->
+  <main id="chat-window" class="flex-grow overflow-y-auto pt-[88px] pb-[136px] px-6 max-w-3xl w-full mx-auto scroll-smooth">
+    <div id="chat-messages" class="space-y-6 pt-4">
+      <!-- Chat bubbles injected programmatically here -->
+      
+      <!-- Hidden Bot Typing Indicator (inside bot bubble format) -->
+      <div id="typing-indicator" class="hidden flex items-start gap-3 animate-pop-in">
+        <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white flex-shrink-0 select-none">
+          <span class="material-symbols-outlined text-[16px]">smart_toy</span>
+        </div>
+        <div class="bg-white border border-[#e0e3e5] px-4 py-3.5 rounded-[20px] rounded-bl-[4px] shadow-sm flex items-center gap-1.5 h-11">
+          <span class="w-2 h-2 bg-on-surface-variant/60 rounded-full dot-bounce" style="animation-delay: 0ms"></span>
+          <span class="w-2 h-2 bg-on-surface-variant/60 rounded-full dot-bounce" style="animation-delay: 150ms"></span>
+          <span class="w-2 h-2 bg-on-surface-variant/60 rounded-full dot-bounce" style="animation-delay: 300ms"></span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Input Bar & Disclaimer: Fixed Bottom -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-[#e0e3e5] px-6 py-4.5 z-40 shadow-lg">
+    <div class="max-w-3xl mx-auto space-y-2.5">
+      <!-- Input Box -->
+      <div class="flex items-end gap-3 relative">
+        <textarea id="chat-input" rows="1" placeholder="Type your message here..." class="flex-grow resize-none bg-surface border border-[#e0e3e5] rounded-2xl py-3.5 px-4 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-sm max-h-[120px] overflow-y-auto leading-relaxed transition-all placeholder-on-surface-variant/40 disabled:bg-slate-50 disabled:opacity-70"></textarea>
+        
+        <button id="send-btn" class="w-11 h-11 bg-primary text-white rounded-full flex items-center justify-center shadow-md hover:scale-105 active:scale-95 transition-transform duration-150 flex-shrink-0 disabled:opacity-50 disabled:scale-100 disabled:pointer-events-none" title="Send message">
+          <span class="material-symbols-outlined text-[20px]">send</span>
+        </button>
+      </div>
+      
+      <!-- Footer Note -->
+      <p class="text-[10px] text-center text-on-surface-variant/60 leading-tight">
+        Kavin is an AI — always verify admission details with official sources.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Script for Chat Logic & Backend Communications -->
+  <script>
+    const BACKEND_URL = 'http://localhost:5000';
+    let history = [];
+    let isWaiting = false;
+
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const chatWindow = document.getElementById('chat-window');
+    const chatMessages = document.getElementById('chat-messages');
+    const typingIndicator = document.getElementById('typing-indicator');
+
+    // Auto-scroll helper
+    function scrollToBottom() {
+      setTimeout(() => {
+        chatWindow.scrollTo({
+          top: chatWindow.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 50);
+    }
+
+    // Auto-resize input textarea (max 120px height)
+    chatInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+
+    // Handle keydown: Enter to send (Shift+Enter for newline)
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    // Handle button click to send
+    sendBtn.addEventListener('click', handleSend);
+
+    // Dynamic message bubble creation
+    function renderMessageBubble(sender, text) {
+      const wrapper = document.createElement('div');
+      
+      if (sender === 'bot') {
+        // Bot Bubble Style: white bg, border, rounded, smart_toy avatar on left
+        wrapper.className = 'flex items-start gap-3 animate-pop-in';
+        wrapper.innerHTML = `
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white flex-shrink-0 select-none">
+            <span class="material-symbols-outlined text-[16px]">smart_toy</span>
+          </div>
+          <div class="bg-white border border-[#e0e3e5] text-on-surface p-4 rounded-[20px] rounded-bl-[4px] max-w-[80%] shadow-sm leading-relaxed text-sm style-pre-wrap"></div>
+        `;
+        wrapper.querySelector('.style-pre-wrap').textContent = text;
+      } else {
+        // User Bubble Style: primary bg, white text, person avatar on right
+        wrapper.className = 'flex items-start justify-end gap-3 animate-pop-in';
+        wrapper.innerHTML = `
+          <div class="bg-primary text-white p-4 rounded-[20px] rounded-br-[4px] max-w-[80%] shadow-md leading-relaxed text-sm style-pre-wrap" style="box-shadow: 0 8px 24px -6px rgba(0, 74, 198, 0.35)"></div>
+          <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 flex-shrink-0 select-none">
+            <span class="material-symbols-outlined text-[16px]">person</span>
+          </div>
+        `;
+        wrapper.querySelector('.style-pre-wrap').textContent = text;
+      }
+      
+      // Inject before typing indicator
+      chatMessages.insertBefore(wrapper, typingIndicator);
+      scrollToBottom();
+    }
+
+    // Dynamic banner alert (green for lead captured)
+    function showLeadBanner(leadData) {
+      const bannersContainer = document.getElementById('banners-container');
+      const banner = document.createElement('div');
+      banner.className = 'pointer-events-auto bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl flex items-center gap-3 text-sm shadow-md animate-slide-in';
+      
+      const name = leadData.name || 'Student';
+      const stream = leadData.stream || 'Admission';
+      const slot = leadData.slot || 'TBD';
+      
+      banner.innerHTML = `
+        <span class="material-symbols-outlined text-emerald-600 text-[20px]">check_circle</span>
+        <div class="flex-grow">
+          <strong>Lead saved!</strong> ${name} — ${stream} | Slot: ${slot}
+        </div>
+        <button class="text-emerald-800/60 hover:text-emerald-800 font-bold" onclick="this.parentElement.remove()">✕</button>
+      `;
+      
+      bannersContainer.appendChild(banner);
+      
+      // Auto-remove banner after 8 seconds
+      setTimeout(() => {
+        if (banner.parentElement) {
+          banner.classList.add('opacity-0');
+          setTimeout(() => banner.remove(), 400);
+        }
+      }, 8000);
+    }
+
+    // Dynamic banner alert (yellow for human escalation)
+    function showEscalatedBanner() {
+      const bannersContainer = document.getElementById('banners-container');
+      const banner = document.createElement('div');
+      banner.className = 'pointer-events-auto bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl flex items-center gap-3 text-sm shadow-md animate-slide-in';
+      banner.innerHTML = `
+        <span class="material-symbols-outlined text-amber-600 text-[20px]">support_agent</span>
+        <div class="flex-grow">
+          <strong>Session Escalated</strong> — Yellow Alert. A human advisor has been requested.
+        </div>
+        <button class="text-amber-800/60 hover:text-amber-800 font-bold" onclick="this.parentElement.remove()">✕</button>
+      `;
+      bannersContainer.appendChild(banner);
+      
+      // Update header indicators
+      const statusDot = document.getElementById('status-dot');
+      const statusText = document.getElementById('status-text');
+      
+      statusDot.innerHTML = `
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+      `;
+      statusText.textContent = 'Escalated to human counsellor';
+      statusText.className = 'text-[11px] font-semibold text-amber-600';
+    }
+
+    // Send processing
+    async function handleSend() {
+      const text = chatInput.value.trim();
+      if (!text || isWaiting) return;
+
+      // Lock input UI
+      isWaiting = true;
+      chatInput.disabled = true;
+      sendBtn.disabled = true;
+      chatInput.value = '';
+      chatInput.style.height = 'auto'; // reset resize heights
+
+      // Render User Message & push history
+      renderMessageBubble('user', text);
+      history.push({ role: 'user', content: text });
+
+      // Unhide Bot Typing Bubble
+      typingIndicator.classList.remove('hidden');
+      scrollToBottom();
+
+      try {
+        const response = await fetch(`${BACKEND_URL}/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: text,
+            history: history.slice(0, -1) // pass chat history omitting current turn
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Connection failed');
+        }
+
+        const data = await response.json();
+
+        // Hide Typing Bubble
+        typingIndicator.classList.add('hidden');
+
+        // Render Bot response & update history
+        renderMessageBubble('bot', data.reply);
+        history.push({ role: 'assistant', content: data.reply });
+
+        // Event banner checks
+        if (data.leadCaptured) {
+          showLeadBanner(data.leadData || {});
+        }
+
+        if (data.escalated) {
+          showEscalatedBanner();
+        }
+
+      } catch (error) {
+        console.error('API Error:', error);
+        typingIndicator.classList.add('hidden');
+        renderMessageBubble('bot', '⚠️ Connection Error: I couldn\'t reach the admission server. Please check if the backend is running at http://localhost:5000.');
+      } finally {
+        // Unlock input UI
+        isWaiting = false;
+        chatInput.disabled = false;
+        sendBtn.disabled = false;
+        chatInput.focus();
+        scrollToBottom();
+      }
+    }
+
+    // Welcome message load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const welcomeText = `Vanakkam! I'm Kavin, your AI Admission Counsellor for Tamil Nadu.
+
+I can help you with:
+- TNEA Engineering cutoff calculation and college matching
+- NEET Medical college matching and course selection
+- Diploma and Polytechnic admissions after 10th
+- Choosing the right 11th group after 10th standard
+- Complete guidance if you are not sure what to do next
+- Top 3 college recommendations with department details
+- Booking a free counselling call
+
+Tell me — which stream are you interested in?
+1. Engineering after 12th
+2. Medical after 12th
+3. Diploma or Polytechnic after 10th
+4. Just finished 10th — help choose 11th group
+5. Not sure — help me decide`;
+        
+        renderMessageBubble('bot', welcomeText);
+        history.push({ role: 'assistant', content: welcomeText });
+      }, 400);
+    });
+  </script>
+
+</body>
+</html>

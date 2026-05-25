@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>EduBot Admission | AI-Powered Tamil Nadu Admission Counsellor</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+  
+  <!-- Google Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+  
+  <!-- Custom Tailwind Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#004ac6",
+            secondary: "#712ae2",
+            tertiary: "#005e6e",
+            surface: "#f7f9fb",
+            "on-surface": "#191c1e",
+            "on-surface-variant": "#434655"
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Inline CSS for Animations & Glassmorphism -->
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f9fb;
+      color: #191c1e;
+      overflow-x: hidden;
+    }
+
+    /* Mesh Gradient Container */
+    .mesh-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -10;
+      overflow: hidden;
+      background-color: #f7f9fb;
+      pointer-events: none;
+    }
+
+    /* Mesh Gradient blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.38;
+      mix-blend-mode: multiply;
+      will-change: transform;
+    }
+
+    .blob-blue {
+      background-color: #004ac6;
+      width: 550px;
+      height: 550px;
+      top: -10%;
+      left: -10%;
+      animation: moveBlobBlue 25s infinite alternate ease-in-out;
+    }
+
+    .blob-purple {
+      background-color: #712ae2;
+      width: 650px;
+      height: 650px;
+      bottom: -15%;
+      right: -10%;
+      animation: moveBlobPurple 30s infinite alternate ease-in-out;
+    }
+
+    .blob-teal {
+      background-color: #005e6e;
+      width: 480px;
+      height: 480px;
+      top: 35%;
+      left: 20%;
+      animation: moveBlobTeal 28s infinite alternate ease-in-out;
+    }
+
+    @keyframes moveBlobBlue {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(140px, 90px) scale(1.15); }
+      100% { transform: translate(-40px, 160px) scale(0.9); }
+    }
+
+    @keyframes moveBlobPurple {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-120px, -90px) scale(0.9); }
+      100% { transform: translate(90px, -200px) scale(1.1); }
+    }
+
+    @keyframes moveBlobTeal {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(160px, -140px) scale(1.1); }
+      100% { transform: translate(-90px, 100px) scale(0.85); }
+    }
+
+    /* Premium Glassmorphism */
+    .glass {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+    }
+
+    .glass-dark {
+      background: rgba(15, 23, 42, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 24px 64px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    /* Floating Keyframe Animation */
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-delayed {
+      animation: float 6s ease-in-out infinite;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* Glow Shadows */
+    .glow-primary {
+      box-shadow: 0 10px 30px -10px rgba(0, 74, 198, 0.4);
+    }
+
+    /* Dot Pattern Background Overlay */
+    .dot-pattern {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+    }
+
+    /* Intersection Observer Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Custom Material Symbol Layout Alignment */
+    .material-symbols-outlined {
+      vertical-align: middle;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface">
+
+  <!-- Animated Mesh Background Blobs -->
+  <div class="mesh-container">
+    <div class="blob blob-blue"></div>
+    <div class="blob blob-purple"></div>
+    <div class="blob blob-teal"></div>
+  </div>
+
+  <!-- Sticky Glass Navbar -->
+  <nav class="sticky top-0 z-50 w-full glass border-b border-white/20">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <!-- Logo: EduBot in primary, Admission in on-surface -->
+      <a href="#" class="text-2xl font-black tracking-tight select-none">
+        <span class="text-primary">EduBot</span> <span class="text-on-surface">Admission</span>
+      </a>
+      
+      <!-- Nav Links -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors">Features</a>
+        <a href="#colleges" class="text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors">Colleges</a>
+        <a href="admin.html" class="text-sm font-semibold text-on-surface-variant hover:text-primary transition-colors">Admin</a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-4">
+        <a href="contact.html" class="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors px-4 py-2">Contact</a>
+        <a href="chat.html" class="inline-flex items-center gap-1 px-5 py-2.5 bg-primary text-white text-sm font-bold rounded-full shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-transform duration-150 glow-primary">
+          Start Free Chat <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="max-w-7xl mx-auto px-6 pt-16 pb-24 md:py-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <!-- Left Column (Copy and CTAs) -->
+    <div class="space-y-8">
+      <!-- Verified Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/40 border border-white/50 backdrop-blur-md shadow-sm">
+        <span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+        <span class="text-xs font-bold tracking-wider text-primary uppercase">Tamil Nadu's #1 AI Counsellor</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-on-surface tracking-tight leading-none">
+        Your AI-Powered <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Tamil Nadu</span> Admission Counsellor
+      </h1>
+
+      <!-- Subtitle -->
+      <p class="text-lg text-on-surface-variant leading-relaxed max-w-xl">
+        Expert guidance for Engineering (TNEA) and Medical (NEET) admissions.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="chat.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white font-bold rounded-full shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-transform duration-150">
+          Chat with Kavin <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+        </a>
+        <a href="contact.html" class="inline-flex items-center justify-center px-8 py-4 glass text-on-surface font-semibold rounded-full border border-white/50 shadow-sm hover:bg-white/40 hover:scale-105 active:scale-95 transition-all duration-150">
+          Book a Call
+        </a>
+      </div>
+
+      <!-- Trust Badge / Logos -->
+      <div class="pt-8 border-t border-white/20 space-y-3">
+        <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">Trusted by students targeting</p>
+        <div class="flex flex-wrap items-center gap-6 opacity-75">
+          <span class="font-extrabold text-xl tracking-tight text-on-surface">VIT</span>
+          <span class="font-black text-xl tracking-tight text-on-surface">SASTRA</span>
+          <span class="font-extrabold text-xl tracking-widest text-on-surface">NIT</span>
+          <span class="text-xs font-bold text-on-surface bg-white/40 border border-white/50 backdrop-blur-md px-3 py-1 rounded-full">500+ Colleges</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column (Fake Chat Preview Card) -->
+    <div class="relative w-full max-w-md mx-auto">
+      <!-- Floating Badge 1: 3L+ Students Helped -->
+      <div class="absolute -top-6 -left-10 floating glass px-4 py-3 rounded-2xl shadow-xl border border-white/30 backdrop-blur-md flex items-center gap-3 z-20">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined">groups</span>
+        </div>
+        <div>
+          <div class="font-black text-on-surface text-sm">3L+</div>
+          <div class="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Students Helped</div>
+        </div>
+      </div>
+
+      <!-- Floating Badge 2: Instant Cutoff Prediction -->
+      <div class="absolute -bottom-6 -right-6 floating-delayed glass px-4 py-3 rounded-2xl shadow-xl border border-white/30 backdrop-blur-md flex items-center gap-3 z-20">
+        <div class="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+          <span class="material-symbols-outlined">bolt</span>
+        </div>
+        <div>
+          <div class="font-black text-on-surface text-sm">Instant</div>
+          <div class="text-[9px] text-on-surface-variant font-bold uppercase tracking-wider">Cutoff Prediction</div>
+        </div>
+      </div>
+
+      <!-- Dark Glass Phone mock -->
+      <div class="glass-dark rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl relative">
+        <!-- Chat Header -->
+        <div class="bg-primary px-6 py-4 flex items-center justify-between text-white shadow-md">
+          <div class="flex items-center gap-3">
+            <!-- Kavin Avatar -->
+            <div class="relative w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-white shadow-inner select-none">
+              K
+              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-slate-900 rounded-full"></span>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white">Kavin (AI Counsellor)</h4>
+              <p class="text-[10px] text-green-200 font-semibold flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> Online 24/7
+              </p>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-white/70 hover:text-white cursor-pointer transition-colors">more_vert</span>
+        </div>
+
+        <!-- Chat Area -->
+        <div class="p-6 space-y-4 max-h-[360px] overflow-y-auto bg-slate-950/40">
+          <!-- Message 1 (User) -->
+          <div class="flex justify-end">
+            <div class="bg-primary/95 text-white px-4 py-3 rounded-2xl rounded-tr-none max-w-[85%] text-xs shadow-md">
+              My TNEA cutoff is 194.5 (BC). Which top CSE colleges can I get?
+            </div>
+          </div>
+
+          <!-- Message 2 (Bot) -->
+          <div class="flex justify-start">
+            <div class="bg-white/10 text-white/95 px-4 py-3.5 rounded-2xl rounded-tl-none max-w-[85%] text-xs border border-white/5 shadow-md space-y-2">
+              <p>With 194.5 in BC, here are 3 excellent options:</p>
+              <div class="space-y-1.5 text-white/80 font-medium">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>
+                  <span><strong>PSG Tech, Coimbatore</strong></span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                  <span><strong>TCE Madurai</strong></span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span>
+                  <span><strong>GCT Coimbatore</strong></span>
+                </div>
+              </div>
+              <p class="text-[10px] text-white/50 pt-1">I can help filter by region or fees. What is your preference?</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mock Input bar -->
+        <div class="p-4 bg-slate-950/60 border-t border-white/5 flex gap-2">
+          <input type="text" placeholder="Type your cutoff or question..." class="flex-grow bg-white/5 border border-white/10 focus:ring-1 focus:ring-primary focus:border-primary rounded-full px-5 py-2.5 text-xs text-white placeholder-white/30" disabled />
+          <a href="chat.html" class="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-transform duration-150 flex-shrink-0">
+            <span class="material-symbols-outlined text-[18px]">send</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="reveal max-w-7xl mx-auto px-6 py-24 border-t border-white/20">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-xs font-bold tracking-widest text-primary uppercase">Powerful Ecosystem</span>
+      <h2 class="text-3xl md:text-4xl font-extrabold text-on-surface tracking-tight mt-2">Precision Admissions Tools</h2>
+      <p class="text-on-surface-variant text-base mt-3 leading-relaxed">Everything you need to successfully navigate TNEA and NEET counseling cycles, powered by AI.</p>
+    </div>
+
+    <!-- Grid of 6 cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- 1. Cutoff Calculator -->
+      <div class="group glass p-8 rounded-3xl border border-white/30 hover:shadow-xl hover:border-primary/30 transition-all duration-300 transform hover:-translate-y-2">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-primary/10 text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white mb-6">
+          <span class="material-symbols-outlined text-[28px]">calculate</span>
+        </div>
+        <h3 class="text-xl font-bold text-on-surface mb-2">Cutoff Calculator</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Instant TNEA and NEET score calculation</p>
+      </div>
+
+      <!-- 2. College Matching -->
+      <div class="group glass p-8 rounded-3xl border border-white/30 hover:shadow-xl hover:border-secondary/30 transition-all duration-300 transform hover:-translate-y-2">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-secondary/10 text-secondary transition-all duration-300 group-hover:bg-secondary group-hover:text-white mb-6">
+          <span class="material-symbols-outlined text-[28px]">school</span>
+        </div>
+        <h3 class="text-xl font-bold text-on-surface mb-2">College Matching</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">3 colleges matched by cutoff, category, district, budget</p>
+      </div>
+
+      <!-- 3. Call Booking -->
+      <div class="group glass p-8 rounded-3xl border border-white/30 hover:shadow-xl hover:border-tertiary/30 transition-all duration-300 transform hover:-translate-y-2">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-tertiary/10 text-tertiary transition-all duration-300 group-hover:bg-tertiary group-hover:text-white mb-6">
+          <span class="material-symbols-outlined text-[28px]">event_available</span>
+        </div>
+        <h3 class="text-xl font-bold text-on-surface mb-2">Call Booking</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Book counselling call, Kavin confirms automatically</p>
+      </div>
+
+      <!-- 4. Human Escalation -->
+      <div class="group glass p-8 rounded-3xl border border-white/30 hover:shadow-xl hover:border-red-500/30 transition-all duration-300 transform hover:-translate-y-2">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-red-500/10 text-red-600 transition-all duration-300 group-hover:bg-red-600 group-hover:text-white mb-6">
+          <span class="material-symbols-outlined text-[28px]">support_agent</span>
+        </div>
+        <h3 class="text-xl font-bold text-on-surface mb-2">Human Escalation</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Say I want to talk to someone, Kavin flags you</p>
+      </div>
+
+      <!-- 5. TNEA + NEET Both -->
+      <div class="group glass p-8 rounded-3xl border border-white/30 hover:shadow-xl hover:border-green-500/30 transition-all duration-300 transform hover:-translate-y-2">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-green-500/10 text-green-600 transition-all duration-300 group-hover:bg-green-600 group-hover:text-white mb-6">
+          <span class="material-symbols-outlined text-[28px]">medical_services</span>
+        </div>
+        <h3 class="text-xl font-bold text-on-surface mb-2">TNEA + NEET Both</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Engineering and Medical both streams</p>
+      </div>
+
+      <!-- 6. Natural Conversation -->
+      <div class="group glass p-8 rounded-3xl border border-white/30 hover:shadow-xl hover:border-orange-500/30 transition-all duration-300 transform hover:-translate-y-2">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-orange-500/10 text-orange-600 transition-all duration-300 group-hover:bg-orange-600 group-hover:text-white mb-6">
+          <span class="material-symbols-outlined text-[28px]">chat</span>
+        </div>
+        <h3 class="text-xl font-bold text-on-surface mb-2">Natural Conversation</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Understands English, Tamil-English mix, typos</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Colleges Section -->
+  <section id="colleges" class="reveal max-w-7xl mx-auto px-6 py-24 border-t border-white/20">
+    <!-- Section Header with CTA -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
+      <div>
+        <span class="text-xs font-bold tracking-widest text-primary uppercase">Premier Institutions</span>
+        <h2 class="text-3xl md:text-4xl font-extrabold text-on-surface tracking-tight mt-2">Find Your Target College</h2>
+        <p class="text-on-surface-variant text-base mt-2 max-w-xl leading-relaxed">Explore seat options at the state's most sought-after medical and engineering campuses.</p>
+      </div>
+      <a href="chat.html" class="inline-flex items-center gap-2 px-6 py-3.5 bg-white/40 border border-white/50 backdrop-blur-md text-primary font-bold rounded-full shadow-sm hover:bg-primary hover:text-white hover:scale-105 active:scale-95 transition-all duration-150">
+        Find Your Match <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+      </a>
+    </div>
+
+    <!-- Grid of 3 colleges -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- CEG Card -->
+      <div class="group glass rounded-3xl overflow-hidden border border-white/30 hover:shadow-xl transition-all duration-300 flex flex-col transform hover:-translate-y-2">
+        <div class="h-44 w-full relative overflow-hidden">
+          <img
+            src="ceg-college.png"
+            alt="College of Engineering Guindy, Anna University"
+            class="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+          />
+          <!-- Overlay gradient for legibility -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <!-- CEG label badge -->
+          <span class="absolute bottom-3 left-4 text-2xl font-black text-white drop-shadow-lg tracking-wider select-none">CEG</span>
+        </div>
+        <div class="p-6 flex-grow flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-on-surface mb-1">Anna University Guindy</h3>
+            <p class="text-sm text-on-surface-variant flex items-center gap-1 mb-6">
+              <span class="material-symbols-outlined text-[18px]">location_on</span> Chennai
+            </p>
+          </div>
+          
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/20">
+            <div>
+              <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5">Cutoff (TNEA)</p>
+              <p class="text-lg font-black text-primary">199.5</p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5">Annual Fees</p>
+              <p class="text-lg font-black text-on-surface">₹50,000</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PSG Card -->
+      <div class="group glass rounded-3xl overflow-hidden border border-white/30 hover:shadow-xl transition-all duration-300 flex flex-col transform hover:-translate-y-2">
+        <div class="h-44 w-full relative overflow-hidden">
+          <img
+            src="psg-college.png"
+            alt="PSG College of Technology, Coimbatore"
+            class="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+          />
+          <!-- Overlay gradient for legibility -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <!-- PSG label badge -->
+          <span class="absolute bottom-3 left-4 text-2xl font-black text-white drop-shadow-lg tracking-wider select-none">PSG</span>
+        </div>
+        <div class="p-6 flex-grow flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-on-surface mb-1">PSG College of Tech</h3>
+            <p class="text-sm text-on-surface-variant flex items-center gap-1 mb-6">
+              <span class="material-symbols-outlined text-[18px]">location_on</span> Coimbatore
+            </p>
+          </div>
+          
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/20">
+            <div>
+              <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5">Cutoff (TNEA)</p>
+              <p class="text-lg font-black text-secondary">200.0</p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5">Annual Fees</p>
+              <p class="text-lg font-black text-on-surface">₹75,000</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MMC Card -->
+      <div class="group glass rounded-3xl overflow-hidden border border-white/30 hover:shadow-xl transition-all duration-300 flex flex-col transform hover:-translate-y-2">
+        <div class="h-44 w-full relative overflow-hidden">
+          <img
+            src="mmc-college.png"
+            alt="Madras Medical College, Chennai"
+            class="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
+          />
+          <!-- Overlay gradient for legibility -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none"></div>
+          <!-- MMC label badge -->
+          <span class="absolute bottom-3 left-4 text-2xl font-black text-white drop-shadow-lg tracking-wider select-none">MMC</span>
+        </div>
+        <div class="p-6 flex-grow flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-on-surface mb-1">Madras Medical College</h3>
+            <p class="text-sm text-on-surface-variant flex items-center gap-1 mb-6">
+              <span class="material-symbols-outlined text-[18px]">location_on</span> Chennai
+            </p>
+          </div>
+          
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/20">
+            <div>
+              <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5">NEET score</p>
+              <p class="text-lg font-black text-tertiary">604+</p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider mb-0.5">Annual Fees</p>
+              <p class="text-lg font-black text-on-surface">₹15,000</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="reveal py-12 px-6 max-w-5xl mx-auto w-full">
+    <div class="relative bg-gradient-to-r from-primary to-secondary rounded-[3rem] p-12 md:p-20 text-center overflow-hidden shadow-2xl shadow-primary/20">
+      <!-- Dot pattern overlay -->
+      <div class="absolute inset-0 opacity-10 dot-pattern pointer-events-none"></div>
+      
+      <div class="relative z-10 max-w-2xl mx-auto">
+        <h2 class="text-3xl md:text-5xl font-black text-white leading-tight mb-6">Ready to Find Your College?</h2>
+        <p class="text-white/80 text-base md:text-lg mb-10 leading-relaxed">
+          Start your counseling and predicted cutoff search today with our conversational AI counsellor Kavin.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="chat.html" class="px-8 py-4 bg-white text-primary font-bold rounded-full shadow-lg shadow-white/10 w-full sm:w-auto hover:scale-105 active:scale-95 transition-transform duration-150">
+            Chat with Kavin &rarr;
+          </a>
+          <a href="contact.html" class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-full border border-white/30 backdrop-blur-sm w-full sm:w-auto hover:scale-105 active:scale-95 transition-all duration-150">
+            Talk to a Human
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="bg-slate-950 text-slate-400 py-16 px-6 border-t border-white/5 mt-16">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+      <!-- Col 1: Brand & Tagline -->
+      <div class="space-y-4">
+        <div class="text-2xl font-black tracking-tight"><span class="text-primary">EduBot</span> <span class="text-white">Admission</span></div>
+        <p class="text-sm leading-relaxed text-slate-400">
+          Elevating educational futures through cutting-edge AI and precision data-driven counselling for all Tamil Nadu aspirants.
+        </p>
+      </div>
+      
+      <!-- Col 2: Quick Links -->
+      <div class="space-y-4">
+        <h4 class="text-white font-bold text-sm uppercase tracking-wider">Quick Links</h4>
+        <ul class="space-y-2.5 text-sm">
+          <li><a href="chat.html" class="hover:text-primary transition-colors">AI Assistant</a></li>
+          <li><a href="contact.html" class="hover:text-primary transition-colors">Book a Call</a></li>
+          <li><a href="admin.html" class="hover:text-primary transition-colors">Admin Console</a></li>
+        </ul>
+      </div>
+      
+      <!-- Col 3: Admissions Topics & Socials -->
+      <div class="space-y-4">
+        <h4 class="text-white font-bold text-sm uppercase tracking-wider">Admissions</h4>
+        <ul class="space-y-2.5 text-sm mb-6">
+          <li><span class="hover:text-primary transition-colors cursor-pointer">TNEA Engineering</span></li>
+          <li><span class="hover:text-primary transition-colors cursor-pointer">NEET Medical</span></li>
+          <li><span class="hover:text-primary transition-colors cursor-pointer">Counselling Procedure</span></li>
+        </ul>
+        <div class="flex gap-4 pt-2">
+          <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white hover:border-transparent transition-all duration-300">
+            <span class="material-symbols-outlined text-[18px]">public</span>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white hover:border-transparent transition-all duration-300">
+            <span class="material-symbols-outlined text-[18px]">alternate_email</span>
+          </a>
+          <a href="#" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:text-white hover:border-transparent transition-all duration-300">
+            <span class="material-symbols-outlined text-[18px]">share</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Copyright & Bottom Bar -->
+    <div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+      <p>© 2026 EduBot Admission. Built with ❤️ for Tamil Nadu students.</p>
+      <div class="flex gap-6">
+        <span class="hover:text-slate-400 cursor-pointer transition-colors">Privacy Policy</span>
+        <span class="hover:text-slate-400 cursor-pointer transition-colors">Terms of Service</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Reveal Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Intersection Observer for scroll reveal animations
+      const reveals = document.querySelectorAll(".reveal");
+      const observerOptions = {
+        root: null,
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+      };
+      
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+            observer.unobserve(entry.target); // only reveal once
+          }
+        });
+      }, observerOptions);
+      
+      reveals.forEach(el => revealObserver.observe(el));
+    });
+  </script>
+
+</body>
+</html>

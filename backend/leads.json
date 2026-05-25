@@ -1,0 +1,28 @@
+[
+  {
+    "name": "Arun",
+    "phone": "9876543210",
+    "stream": "Engineering",
+    "board": "State Board",
+    "marks": "98,96,94",
+    "cutoff": "193",
+    "colleges": "College of Engineering Guindy, SSN College of Engineering, Sri Venkateswara College of Engineering",
+    "department": "EEE",
+    "slot": "Confirmed",
+    "escalated": false,
+    "timestamp": "2026-05-25T05:34:48.930Z"
+  },
+  {
+    "name": "Arun",
+    "phone": "9876543210",
+    "stream": "Engineering",
+    "board": "State Board",
+    "marks": "193",
+    "cutoff": "193",
+    "colleges": "College of Engineering Guindy, SSN College of Engineering, Sri Venkateswara College of Engineering",
+    "department": "EEE",
+    "slot": "Monday 10AM",
+    "escalated": false,
+    "timestamp": "2026-05-25T05:35:07.865Z"
+  }
+]
