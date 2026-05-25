@@ -225,7 +225,7 @@ export default function Admin() {
               <div className="space-y-2">
                 <h4 className="text-white font-bold text-base">Server Offline</h4>
                 <p className="text-white/40 text-xs leading-relaxed">
-                  Unable to connect to the backend server. Verify the server is running on <code className="bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-white font-mono">http://localhost:5000</code>.
+                  Unable to connect to the backend server. Verify the server is running on <code className="bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-white font-mono">https://edubot-admission.onrender.com</code>.
                 </p>
               </div>
               <div className="w-full text-left bg-black/40 rounded-xl p-4 border border-white/[0.05] space-y-2 select-all">

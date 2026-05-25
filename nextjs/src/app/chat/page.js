@@ -118,7 +118,7 @@ Tell me — which stream are you interested in? Engineering, Medical, Diploma af
       console.error("Chat fetch error:", error);
       setHistory(prev => [...prev, { 
         role: "assistant", 
-        content: "⚠️ Connection Error: I couldn't reach the admission server. Please check if the backend is running at http://localhost:5000." 
+        content: "⚠️ Connection Error: I couldn't reach the admission server. Please check if the backend is running at https://edubot-admission.onrender.com." 
       }]);
     } finally {
       setIsWaiting(false);
